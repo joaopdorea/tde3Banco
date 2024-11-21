@@ -1,4 +1,4 @@
-# Stage 1: Build
+# Stage 1: Build the application
 FROM maven:3.9.4-eclipse-temurin-21 AS build
 LABEL authors="renan-fig"
 LABEL description="This is the Dockerfile for the Projetorest service"
@@ -6,21 +6,24 @@ LABEL description="This is the Dockerfile for the Projetorest service"
 # Set the working directory
 WORKDIR /app
 
-# Copy only essential files first (optimize build cache)
-COPY pom.xml mvnw ./
+# Copy pom.xml and download dependencies
+COPY mvnw ./
 COPY .mvn .mvn
+COPY pom.xml ./
 
-# Ensure the wrapper is executable
 RUN chmod +x mvnw
 
-# Download dependencies
-RUN ./mvnw dependency:go-offline -B
+RUN mvn dependency:go-offline -B
 
-# Copy the source code and build the application
+# Copy the source code
 COPY src src
-RUN ./mvnw clean package -DskipTests
 
-# Stage 2: Run
+# Build the application
+RUN mvn clean package -DskipTests
+
+RUN ls -l /app/target
+
+# Stage 2: Run the application
 FROM eclipse-temurin:21-jre
 
 # Set the working directory
@@ -29,8 +32,8 @@ WORKDIR /app
 # Copy the built jar from the build stage
 COPY --from=build /app/target/projetorest-0.0.1-SNAPSHOT.jar app.jar
 
-# Expose the application port
+# Expose port 8080
 EXPOSE 8081
 
 # Define the entrypoint
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]]
