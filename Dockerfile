@@ -1,5 +1,5 @@
 # Stage 1: Build the application
-FROM maven:3.9.4-eclipse-temurin-21 AS build
+FROM openjdk:21-jdk-slim AS build
 LABEL authors="renan-fig"
 LABEL description="This is the Dockerfile for the Projetorest service"
 
@@ -24,7 +24,7 @@ RUN mvn clean package -DskipTests
 RUN ls -l /app/target
 
 # Stage 2: Run the application
-FROM eclipse-temurin:21-jre
+FROM openjdk:21-jre-slim
 
 # Set the working directory
 WORKDIR /app
