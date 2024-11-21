@@ -24,7 +24,7 @@ RUN mvn clean package -DskipTests
 RUN ls -l /app/target
 
 # Stage 2: Run the application
-FROM eclipse-temurin:21-jre
+FROM openjdk:21-jre-slim
 
 # Set the working directory
 WORKDIR /app
@@ -36,4 +36,4 @@ COPY --from=build /app/target/projetorest-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8081
 
 # Define the entrypoint
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]]
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
