@@ -1,6 +1,7 @@
 package com.example.demo.api;
 
 
+import com.example.demo.Repository.DriverDAO;
 import com.example.demo.Repository.TripDAO;
 import com.example.demo.model.Trip;
 import lombok.AllArgsConstructor;
@@ -20,10 +21,19 @@ public class TripController {
     @Autowired
     private final TripDAO tripRepository = null;
 
+    @Autowired
+    private final DriverDAO driverRepository = null;
+
     @GetMapping(value = "/trips", produces = {"application/json", "application/xml"})
     public List<Trip> getAllTrips() {
         return tripRepository.findAll();
     }
+
+    @GetMapping(value = "/trips/{driverId}", produces = {"application/json", "application/xml"})
+    public List<Trip> getTripsByDriverId(@PathVariable Long driverId) {
+        return tripRepository.findByDriverId(driverId);
+    }
+
 
     @GetMapping(value = "/trip/{id}", produces = {"application/json", "application/xml"})
     public ResponseEntity<Trip> getTripById(@PathVariable Long id) {

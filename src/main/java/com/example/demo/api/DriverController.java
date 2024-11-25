@@ -1,6 +1,7 @@
 package com.example.demo.api;
 
 import com.example.demo.Repository.DriverDAO;
+import com.example.demo.Repository.TripDAO;
 import com.example.demo.model.Driver;
 import com.example.demo.model.Trip;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,8 @@ public class DriverController {
     public List<Driver> getAllDrivers() {
         return driverRepository.findAll();
     }
+
+
 
     @PostMapping(value = "/driver", consumes = {"application/json", "application/xml"}, produces = {"application/json", "application/xml"})
     private ResponseEntity<String> addDriver(@RequestBody Driver driver){
